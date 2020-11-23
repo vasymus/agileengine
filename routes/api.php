@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
+});*/
+
+
+Route::get("users/{user_id}/accounts/{account_id}/transactions", [\App\Http\Controllers\UserAccountTransactionsController::class, "index"]);
+
+Route::get("users/{user_id}/accounts/{account_id}/transactions/{transaction_id}", [\App\Http\Controllers\UserAccountTransactionsController::class, "show"]);
+
+Route::post("users/{user_id}/accounts/{account_id}/transactions", [\App\Http\Controllers\UserAccountTransactionsController::class, "store"]);
+
+Route::get("users/{user_id}/accounts/{account_id}/balance", \App\Http\Controllers\UserAccountBalanceController::class);
