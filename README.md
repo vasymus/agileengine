@@ -25,7 +25,7 @@ or run all command using
 php artisan run-all
 ```
 
-Test user will be created with id `1` and test user account will be create with id `1`
+Test user will be created with id `1` and test user account will be create with id `1`. There will be also 1000 test transaction seeds.
 
 To view swagger follow `http://$your-local-domain/api/documentation`
 
