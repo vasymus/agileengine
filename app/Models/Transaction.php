@@ -44,13 +44,14 @@ class Transaction extends Model
         $table = static::TABLE;
         $date = Carbon::now();
 
-        DB::affectingStatement("
+        $res = DB::affectingStatement("
             INSERT INTO $table (`account_id`, `type_id`, `amount`, `created_at`, `updated_at`)
             select $accountId, $debitTypeId, $amount, '$date', '$date'
             WHERE(
                 SELECT SUM(IF(`type_id` = $creditTypeId, amount, -amount)) as balance FROM $table WHERE `account_id` = $accountId GROUP BY `account_id`
             ) >= $amount
         ");
+        if ((int)$res === 0) return null;
 
         $id = DB::connection()->getPdo()->lastInsertId();
 
