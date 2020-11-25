@@ -43,5 +43,5 @@ Test user will be created with id `1` and test user account will be create with 
 
 To view swagger follow `http://$your-local-domain/api/documentation`
 
-<h2>In order to transaction storing work properly you should either config <a href="https://laravel.com/docs/8.x/queues#supervisor-configuration">Supervisord</a> or run in console (while testing application) `php artisan queue:work`</h2>
+<h2>In order to transaction storing work properly: run again `php artisan migrate` and you should either configure <a href="https://laravel.com/docs/8.x/queues#supervisor-configuration">Supervisord</a> or run in console `php artisan queue:work`</h2>
 
