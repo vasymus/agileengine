@@ -1,6 +1,16 @@
 Laravel project
 https://laravel.com
 
+Installation requirements <a href="https://laravel.com/docs/8.x/installation">here</a>
+
+Public directory should be `/path-to-project/public`
+
+Loaded php extensions (not all required) <a href="https://i.imgur.com/QznJv0O.png">https://i.imgur.com/QznJv0O.png</a>
+
+Download <a href="https://drive.google.com/file/d/1vmootC8Qn0v4lC0anzrYIthry-ZH4UWZ/view?usp=sharing">html file</a> and see phpinfo
+
+For deploying you could use <a href="https://laradock.io">laradock configuration</a>. Namely, `mysql`, `nginx`, `workspace`, `php-fpm`
+
 ```
 cp .env.example .env
 ```
