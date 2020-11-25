@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 
 class HandleTransactionJob implements ShouldQueue
 {
@@ -57,5 +58,15 @@ class HandleTransactionJob implements ShouldQueue
             "amount" => $this->amount,
             "type_id" => $this->typeId,
         ]);
+    }
+
+    /**
+     * Get the middleware the job should pass through.
+     *
+     * @return array
+     */
+    public function middleware()
+    {
+        return [new WithoutOverlapping($this->order->id)];
     }
 }

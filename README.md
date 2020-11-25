@@ -1,6 +1,8 @@
 Laravel project
 https://laravel.com
 
+This branch is an alternate approach in handling transaction store request -- via dispatching <a href="https://laravel.com/docs/8.x/queues">queued jobs</a>, namely, using <a href="https://laravel.com/docs/8.x/queues#preventing-job-overlaps">WithoutOverlapping job middleware</a>
+
 Installation requirements <a href="https://laravel.com/docs/8.x/installation">here</a>
 
 Public directory should be `/path-to-project/public`
@@ -16,6 +18,8 @@ cp .env.example .env
 ```
 
 Fill in `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` in .env file
+
+Fill also in `QUEUE_CONNECTION` as `database` (or other async driver)
 
 ```
 composer install
@@ -38,4 +42,6 @@ php artisan run-all
 Test user will be created with id `1` and test user account will be create with id `1`. There will be also 1000 test transaction seeds.
 
 To view swagger follow `http://$your-local-domain/api/documentation`
+
+<h2>In order to transaction storing work properly you should either config <a href="https://laravel.com/docs/8.x/queues#supervisor-configuration">Supervisord</a> or run in console (while testing application) `php artisan queue:work`</h2>
 
