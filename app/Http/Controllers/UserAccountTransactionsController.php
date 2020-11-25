@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\ValidateDebitTransactionAction;
 use App\Http\Resources\TransactionResource;
+use App\Jobs\HandleTransactionJob;
 use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\TransactionType;
 use App\Providers\AuthServiceProvider;
 use Database\Seeders\AccountsTableSeeder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class UserAccountTransactionsController extends Controller
@@ -96,6 +99,7 @@ class UserAccountTransactionsController extends Controller
             $account->transactions()
                 ->select(['*'])
                 ->with(['type'])
+                ->orderBy("id", "desc")
                 ->paginate(
                     (int)$request->per_page, null, null, (int)$request->page
                 )
@@ -225,12 +229,12 @@ class UserAccountTransactionsController extends Controller
      *          )
      *      ),
      *      @OA\Response(
-     *          response=200,
-     *          description="Newly created transaction",
+     *          response=203,
+     *          description="Message about newly handling transaction",
      *          @OA\JsonContent(
      *              @OA\Property(
-     *                  property="data",
-     *                  @OA\Items(ref="#/components/schemas/user-account-transaction")
+     *                  property="message",
+     *                  type="string"
      *              )
      *          )
      *      ),
@@ -277,12 +281,13 @@ class UserAccountTransactionsController extends Controller
      * )
      *
      * @param Request $request
+     * @param ValidateDebitTransactionAction $validateDebitTransactionAction
      *
      * @return \Illuminate\Contracts\Support\Responsable
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function store(Request $request)
+    public function store(Request $request, ValidateDebitTransactionAction $validateDebitTransactionAction)
     {
         // some authorization logic
         // just an example. It could be much more complicated, of course
@@ -301,16 +306,20 @@ class UserAccountTransactionsController extends Controller
         ]);
 
         $params = $validator->validated();
+        $typeId = $params['type'] === "credit"
+                    ? TransactionType::ID_CREDIT
+                    : TransactionType::ID_DEBIT
+        ;
+        if ($typeId === TransactionType::ID_DEBIT) $validateDebitTransactionAction->execute($account, $params["amount"]);
 
-        if ($params["type"] === "credit") {
-            $transaction = Transaction::handleCredit($account->id, $params['amount']);
-        } else {
-            $transaction = Transaction::handleDebit($account->id, $params['amount']);
-            if (!$transaction) abort(422, "Not enough balance");
-        }
+        HandleTransactionJob::dispatch(
+            $account->id,
+            $params['amount'],
+            $typeId
+        );
 
-        return [
-            "data" => new TransactionResource($transaction),
-        ];
+        return Response::json([
+            "message" => "Transaction have been handled."
+        ], 203);
     }
 }
