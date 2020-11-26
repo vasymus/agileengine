@@ -1,43 +1,47 @@
-Laravel project
-https://laravel.com
+<a href="https://laravel.com">Laravel project</a> and <a href="https://github.com/aschmelyun/docker-compose-laravel">docker-compose-laravel configuration</a>
+
+<h2>In short:</h2>
+<h3>First time run commands for deploying: copy and paste to the terminal (if fails use sudo):</h3>
+```
+docker-compose up -d --build site && \
+docker-compose run --rm composer install && \
+docker-compose run --rm artisan run-all && \
+docker-compose run --rm artisan l5-swagger:generate && \
+docker-compose run --rm artisan queue:work
+```
+
+All following deploying commands: copy and paste in to the terminal (if fails use sudo):
+```
+docker-compose up -d --build site && \
+docker-compose run --rm artisan run-all && \
+docker-compose run --rm artisan l5-swagger:generate && \
+docker-compose run --rm artisan queue:work
+```
+
+<h2>More detailed description</h2>
 
 Installation requirements <a href="https://laravel.com/docs/8.x/installation">here</a>
 
-Public directory should be `/path-to-project/public`
-
-Loaded php extensions (not all required) <a href="https://i.imgur.com/QznJv0O.png">https://i.imgur.com/QznJv0O.png</a>
-
-Download <a href="https://drive.google.com/file/d/1vmootC8Qn0v4lC0anzrYIthry-ZH4UWZ/view?usp=sharing">html file</a> and see phpinfo
-
-For deploying you could use <a href="https://laradock.io">laradock configuration</a>. Namely, `mysql`, `nginx`, `workspace`, `php-fpm`
-
-```
-cp .env.example .env
-```
-
-Fill in `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` in .env file
-
-```
-composer install
-```
-
-You can either run step by step
-
-```
-php artisan key:generate
-php artisan migrate
-php artisan db:seed
-php artisan l5-swagger:generate
-```
-
-or run all command using
+Command
 ```
 php artisan run-all
 ```
+could be run separately:
+```
+docker-compose run --rm artisan key:generate
+docker-compose run --rm artisan migrate
+docker-compose run --rm artisan db:seed
+docker-compose run --rm artisan l5-swagger:generate
+```
+
 
 Test user will be created with id `1` and test user account will be create with id `1`. There will be also 1000 test transaction seeds.
 
 To view swagger follow `http://$your-local-domain/api/documentation`
 
 <h3>Please, note</h3>
-There is also an alternate approach in executing of this task. In order to view it run `git fetch && git checkout threading-variation` and review README.md about specifics of deploying of that branch.
+There is also an alternate approach in executing of this task. In order to view it run `git fetch && git checkout threading-variation` and (just to be sure everything work properly) run
+```
+docker-compose down
+```
+and then again run deploying commands mentioned above.
