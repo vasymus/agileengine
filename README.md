@@ -1,22 +1,24 @@
 <a href="https://laravel.com">Laravel project</a> and <a href="https://github.com/aschmelyun/docker-compose-laravel">docker-compose-laravel configuration</a>
 
 <h2>In short:</h2>
-<h3>First time run commands for deploying: copy and paste to the terminal (if fails use sudo):</h3>
+<h3>First time run commands for deploying: copy and paste to the terminal:</h3>
 ```
-docker-compose up -d --build site && \
+sudo docker-compose up -d --build site && \
 docker-compose run --rm composer install && \
 docker-compose run --rm artisan run-all && \
 docker-compose run --rm artisan l5-swagger:generate && \
 docker-compose run --rm artisan queue:work
 ```
 
-All following deploying commands: copy and paste in to the terminal (if fails use sudo):
+All following deploying commands: copy and paste in to the terminal:
 ```
-docker-compose up -d --build site && \
+sudo docker-compose up -d --build site && \
 docker-compose run --rm artisan run-all && \
 docker-compose run --rm artisan l5-swagger:generate && \
 docker-compose run --rm artisan queue:work
 ```
+
+Then go to <a href="http://localhost:6789/api/documentation">http://localhost:6789/api/documentation</a>
 
 <h2>More detailed description</h2>
 
