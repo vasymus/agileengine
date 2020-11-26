@@ -268,16 +268,14 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Newly created transaction",
+                    "203": {
+                        "description": "Message about newly handling transaction",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "data": {
-                                            "items": {
-                                                "$ref": "#/components/schemas/user-account-transaction"
-                                            }
+                                        "message": {
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
